@@ -1,0 +1,42 @@
+version: '3.8'
+
+services:
+  user-service:
+    build:
+      context: ./user-service
+    ports:
+      - "5003:5003"
+    networks:
+      - bookstore-network
+
+  book-service:
+    build:
+      context: ./book-service
+    ports:
+      - "5001:5001"
+    networks:
+      - bookstore-network
+
+  order-service:
+    build:
+      context: ./order-service
+    ports:
+      - "5002:5002"
+    networks:
+      - bookstore-network
+
+  frontend:
+    build:
+      context: ./frontend
+    ports:
+      - "5000:5000"
+    networks:
+      - bookstore-network
+    depends_on:
+      - user-service
+      - book-service
+      - order-service
+
+networks:
+  bookstore-network:
+    driver: bridge
